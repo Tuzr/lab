@@ -35,7 +35,7 @@ namespace CSharpAdvanceDesignTests
         {
             var urls = GetUrls();
 
-            var actual = JoeySelect(urls, url => url.Replace("http://", "https://")+"/joey");
+            var actual = JoeySelect(urls, url => url.Replace("http://", "https://") + "/joey");
             var expected = new List<string>
             {
                 "https://tw.yahoo.com/joey",
@@ -47,7 +47,8 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldEqual(actual.ToList());
         }
 
-        [Test] public void get_full_name()
+        [Test]
+        public void get_full_name()
         {
 
             var employees = new List<Employee>
@@ -67,6 +68,28 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
+        [Test]
+        public void get_full_name_length()
+        {
+            var employees = new List<Employee>
+            {
+                new Employee {FirstName = "Joey", LastName = "Chen"},
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "David", LastName = "Chen"}
+            };
+            var expected = new[]
+            {
+                8,5,9
+                //"JoeyChen",
+                //"TomLi",
+                //"DavidChen",
+            };
+
+            var actual = JoeySelect(employees, e => $"{e.FirstName}{e.LastName}".Length);
+            expected.ToExpectedObject().ShouldMatch(actual);
+        }
+
+
         private IEnumerable<TResult> JoeySelect<TSource, TResult>(IEnumerable<TSource> source, Func<TSource, TResult> selector)
         {
             List<TResult> resultList = new List<TResult>();
@@ -79,7 +102,7 @@ namespace CSharpAdvanceDesignTests
             return resultList;
         }
 
-       
+
         private static IEnumerable<string> GetUrls()
         {
             yield return "http://tw.yahoo.com";
