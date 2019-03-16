@@ -52,7 +52,7 @@ namespace CSharpAdvanceDesignTests
             Assert.IsTrue(actual);
         }
 
-        private bool JoeySequenceEqual(IEnumerable<int> first, IEnumerable<int> second)
+        public bool JoeySequenceEqual<TSource>(IEnumerable<TSource> first, IEnumerable<TSource> second)
         {
             var firstEnumerator = first.GetEnumerator();
             var secondEnumerator = second.GetEnumerator();
@@ -62,17 +62,17 @@ namespace CSharpAdvanceDesignTests
                 bool firstFlag = firstEnumerator.MoveNext();
                 bool secondFlag = secondEnumerator.MoveNext();
 
-                if (!firstEnumerator.Current.Equals(secondEnumerator.Current))
-                {
-                    return false;
-                }
-
                 if (firstFlag != secondFlag)
                 {
                     return false;
                 }
 
-                if (firstFlag == false || secondFlag == false)
+                if (!firstEnumerator.Current.Equals(secondEnumerator.Current))
+                {
+                    return false;
+                }
+            
+                if (firstFlag == false)
                 {
                     return true;
                 }
