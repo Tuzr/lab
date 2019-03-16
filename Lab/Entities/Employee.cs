@@ -22,7 +22,7 @@ namespace Lab.Entities
     {
         public bool Equals(Employee x, Employee y)
         {
-            return x.FirstName == y.FirstName 
+            return x.FirstName == y.FirstName
                    && x.LastName == y.LastName;
         }
 
@@ -38,5 +38,6 @@ namespace Lab.Entities
         public string FirstName { get; set; }
         public Role Role { get; set; }
         public string Phone { get; set; }
+        public int Age { get; set; }
     }
 }
