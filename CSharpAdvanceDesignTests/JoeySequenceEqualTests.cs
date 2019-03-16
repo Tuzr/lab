@@ -44,14 +44,14 @@ namespace CSharpAdvanceDesignTests
         //    Assert.IsFalse(actual);
         //}
 
-        //[Test]
-        //public void compare_two_numbers_equal_fiveth()
-        //{
-        //    var first = new List<int> { };
-        //    var second = new List<int> { };
-        //    var actual = JoeySequenceEqual(first, second, Comparer<int>.Default);
-        //    Assert.IsTrue(actual);
-        //}
+        [Test]
+        public void compare_two_numbers_equal_fiveth()
+        {
+            var first = new List<int> { };
+            var second = new List<int> { };
+            var actual = JoeySequenceEqual(first, second);
+            Assert.IsTrue(actual);
+        }
 
         [Test]
         public void compare_two_employee_equal()
@@ -76,6 +76,11 @@ namespace CSharpAdvanceDesignTests
 
             var actual = JoeySequenceEqual(first, second, equalityComparer);
             Assert.IsTrue(actual);
+        }
+
+        public bool JoeySequenceEqual<TSource>(IEnumerable<TSource> first, IEnumerable<TSource> second)
+        {
+            return JoeySequenceEqual(first, second, EqualityComparer<TSource>.Default);
         }
 
         public bool JoeySequenceEqual<TSource>(IEnumerable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> joeyEmployeeEqualityConverter)
