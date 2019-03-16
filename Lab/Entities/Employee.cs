@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Lab.Entities
 {
@@ -16,7 +17,7 @@ namespace Lab.Entities
             var firstNameHashCode = obj.FirstName.GetHashCode();
             var lastNameHashCode = obj.LastName.GetHashCode();
 
-            return new {firstNameHashCode, lastNameHashCode}.GetHashCode();
+            return Tuple.Create(firstNameHashCode, lastNameHashCode).GetHashCode();
         }
     }
 
