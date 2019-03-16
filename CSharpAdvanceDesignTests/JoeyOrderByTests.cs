@@ -16,8 +16,8 @@ namespace CSharpAdvanceDesignTests
             KeyComparer = keyComparer;
         }
 
-        public Func<Employee, string> KeySelector { get; private set; }
-        public Comparer<string> KeyComparer { get; private set; }
+        private Func<Employee, string> KeySelector { get;}
+        private Comparer<string> KeyComparer { get; }
 
         public int Compare(Employee element, Employee minElement)
         {
@@ -102,7 +102,8 @@ namespace CSharpAdvanceDesignTests
                     }
                     else if(firstCompareResult == 0)
                     {
-                        if (secondComparer.Compare(element, (minElement)) < 0)
+                        var secondCompareResult = secondComparer.Compare(element, (minElement)) < 0;
+                        if (secondCompareResult)
                         {
                             minElement = element;
                             index = i;
