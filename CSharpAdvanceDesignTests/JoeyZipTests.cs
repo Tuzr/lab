@@ -64,10 +64,10 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(pairs);
         }
 
-        private IEnumerable<string> JoeyZip(IEnumerable<Girl> girls, IEnumerable<Key> keys, Func<Girl,Key, string> resultFunc)
+        private IEnumerable<TResult> JoeyZip<TResource1, TResource2, TResult>(IEnumerable<TResource1> source1, IEnumerable<TResource2> source2, Func<TResource1, TResource2, TResult> resultFunc)
         {
-            var girlEnumerator = girls.GetEnumerator();
-            var keyEnumerator = keys.GetEnumerator();
+            var girlEnumerator = source1.GetEnumerator();
+            var keyEnumerator = source2.GetEnumerator();
 
             while (girlEnumerator.MoveNext() && keyEnumerator.MoveNext())
             {
