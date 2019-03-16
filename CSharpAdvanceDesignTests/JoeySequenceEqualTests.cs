@@ -49,7 +49,7 @@ namespace CSharpAdvanceDesignTests
         //{
         //    var first = new List<int> { };
         //    var second = new List<int> { };
-        //    var actual = JoeySequenceEqual(first, second);
+        //    var actual = JoeySequenceEqual(first, second, Comparer<int>.Default);
         //    Assert.IsTrue(actual);
         //}
 
@@ -91,8 +91,8 @@ namespace CSharpAdvanceDesignTests
                 if (firstFlag != secondFlag)
                 {
                     return false;
-                }               
-            
+                }
+
                 if (firstFlag == false)
                 {
                     return true;
@@ -101,9 +101,9 @@ namespace CSharpAdvanceDesignTests
                 var firstItem = firstEnumerator.Current;
                 var secondItem = secondEnumerator.Current;
 
-                if(joeyEmployeeEqualityConverter.Equals(firstItem, secondItem))               
+                if (!joeyEmployeeEqualityConverter.Equals(firstItem, secondItem))
                 {
-                    return true;
+                    return false;
                 }
             }
         }
