@@ -5,36 +5,91 @@ namespace Lab
 {
     public static class MyOwnLinq
     {
-        public static List<TSource> JoeyWhere<TSource>(this List<TSource> source,
+        public static IEnumerable<TSource> JoeyWhere<TSource>(this IEnumerable<TSource> source,
             Func<TSource, bool> conditionFunc)
         {
-            var result = new List<TSource>();
+            var sourceEnumerator = source.GetEnumerator();
 
-            foreach (TSource item in source)
+            while (sourceEnumerator.MoveNext())
             {
+                var item = sourceEnumerator.Current;
                 if (conditionFunc(item))
                 {
-                    result.Add(item);
+                    yield return item;
                 }
             }
 
-            return result;
+
+            //foreach (TSource item in source)
+            //{
+            //    if (conditionFunc(item))
+            //    {
+            //        yield return item;
+            //    }
+            //}
         }
 
-        public static List<TSource> JoeyWhere<TSource>(this List<TSource> source,
+        public static IEnumerable<TSource> JoeyWhere<TSource>(this IEnumerable<TSource> source,
             Func<TSource, int, bool> conditionFunc)
         {
-            var result = new List<TSource>();
+            int index=0;
 
             foreach (TSource item in source)
             {
-                if (conditionFunc(item, source.IndexOf(item)))
+                if (conditionFunc(item, index))
                 {
-                    result.Add(item);
+                    //result.Add(item);
+                    yield return item;
+                    index++;
                 }
             }
 
-            return result;
+        }
+
+        public static IEnumerable<TResult> JoeySelectWithAppend<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, int, TResult> selector)
+        {
+            List<TResult> resultList = new List<TResult>();
+
+            int index = 0;
+
+            foreach (var item in source)
+            {
+                resultList.Add(selector(item, index));
+                index++;
+            }
+
+            return resultList;
+        }
+
+        public static IEnumerable<TResult> JoeySelect<TSource, TResult>(IEnumerable<TSource> source, Func<TSource, TResult> selector)
+        {
+            //List<TResult> resultList = new List<TResult>();
+
+            foreach (var item in source)
+            {
+                //resultList.Add(selector(item));
+                yield return selector(item);
+            }
+
+            //return resultList;
+        }
+
+
+        public static TSource JoeyFirstOrDefault<TSource>(this IEnumerable<TSource> sources)
+        {
+            var employeeEnumerator = sources.GetEnumerator();
+
+            //while (employeeEnumerator.MoveNext())
+            //{
+            //    if (employeeEnumerator.Current != null)
+            //    {
+            //        return employeeEnumerator.Current;
+            //    }
+            //}
+            //return default(TSource);
+
+            return employeeEnumerator.MoveNext() ? employeeEnumerator.Current : default(TSource);
+
         }
     }
 }

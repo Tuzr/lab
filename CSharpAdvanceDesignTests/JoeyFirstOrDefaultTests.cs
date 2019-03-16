@@ -1,13 +1,11 @@
-﻿using Lab.Entities;
+﻿using System.Collections.Generic;
+using Lab;
+using Lab.Entities;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
-using System;
-using System.Collections.Generic;
 
 namespace CSharpAdvanceDesignTests
 {
-    [TestFixture()]
-    [Ignore("not yet")]
+    [TestFixture]
     public class JoeyFirstOrDefaultTests
     {
         [Test]
@@ -15,14 +13,19 @@ namespace CSharpAdvanceDesignTests
         {
             var employees = new List<Employee>();
 
-            var actual = JoeyFirstOrDefault(employees);
-
+            var actual = employees.JoeyFirstOrDefault();
+            
             Assert.IsNull(actual);
         }
 
-        private Employee JoeyFirstOrDefault(IEnumerable<Employee> employees)
+        [Test]
+        public void get_value_type()
         {
-            throw new NotImplementedException();
+            var test = new List<int>();
+
+            var actual = test.JoeyFirstOrDefault();
+
+            Assert.AreEqual(0, actual);
         }
     }
 }

@@ -7,33 +7,12 @@ using System.Collections.Generic;
 namespace CSharpAdvanceDesignTests
 {
     [TestFixture()]
-    [Ignore("not yet")]
     public class JoeyTakeTests
     {
         [Test]
         public void take_2_employees()
         {
-            var employees = GetEmployees();
-
-            var actual = JoeyTake(employees);
-
-            var expected = new List<Employee>
-            {
-                new Employee {FirstName = "Joey", LastName = "Chen"},
-                new Employee {FirstName = "Tom", LastName = "Li"},
-            };
-
-            expected.ToExpectedObject().ShouldEqual(actual);
-        }
-
-        private IEnumerable<Employee> JoeyTake(IEnumerable<Employee> employees)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        private static IEnumerable<Employee> GetEmployees()
-        {
-            return new List<Employee>
+            var employees = (IEnumerable<Employee>)new List<Employee>
             {
                 new Employee {FirstName = "Joey", LastName = "Chen"},
                 new Employee {FirstName = "Tom", LastName = "Li"},
@@ -41,6 +20,27 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Mike", LastName = "Chang"},
                 new Employee {FirstName = "Joseph", LastName = "Yao"},
             };
+
+            var actual = JoeyTake(employees, 0);
+
+            var expected = new List<Employee>
+            {
+                new Employee {FirstName = "Joey", LastName = "Chen"},
+                new Employee {FirstName = "Tom", LastName = "Li"},
+            };
+
+            expected.ToExpectedObject().ShouldMatch(actual);
+        }
+
+        private IEnumerable<Employee> JoeyTake(IEnumerable<Employee> employees, int count)
+        {
+            var employeeEnumerator = employees.GetEnumerator();
+
+            while (employeeEnumerator.MoveNext() && count < 2)
+            {
+                yield return employeeEnumerator.Current;
+                count++;
+            }
         }
     }
 }

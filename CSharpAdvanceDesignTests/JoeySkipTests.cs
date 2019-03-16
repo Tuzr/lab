@@ -3,11 +3,11 @@ using Lab.Entities;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace CSharpAdvanceDesignTests
 {
     [TestFixture]
-    [Ignore("not yet")]
     public class JoeySkipTests
     {
         [Test]
@@ -15,7 +15,7 @@ namespace CSharpAdvanceDesignTests
         {
             var employees = GetEmployees();
 
-            var actual = JoeySelect(employees);
+            var actual = JoeySkip(employees, 0);
 
             var expected = new List<Employee>
             {
@@ -24,12 +24,35 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joseph", LastName = "Yao"},
             };
 
-            expected.ToExpectedObject().ShouldEqual(actual.ToList());
+            expected.ToExpectedObject().ShouldMatch(actual.ToList());
         }
 
-        private IEnumerable<Employee> JoeySelect(IEnumerable<Employee> employees)
+        [Test]
+        public void numbers_skip_3()
         {
-            throw new System.NotImplementedException();
+            var numbers = new[] {10, 20, 30, 40};
+            var actual = JoeySkip(numbers, 3);
+            var expected = new[] {40};
+            expected.ToExpectedObject().ShouldMatch(actual.ToList());
+        }
+
+      
+
+        private IEnumerable<TSource> JoeySkip<TSource> (IEnumerable<TSource> source, int count)
+        {
+            var employeeEnumerator = source.GetEnumerator();
+
+            int index = 0;
+
+            while (employeeEnumerator.MoveNext())
+            {
+                if (index >= count)
+                {
+                    yield return employeeEnumerator.Current;
+                }
+
+                index++;
+            }
         }
 
         private static IEnumerable<Employee> GetEmployees()

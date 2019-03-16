@@ -5,6 +5,7 @@ using NUnit.Framework;
 using NUnit.Framework.Internal;
 using System.Collections.Generic;
 using System.Linq;
+using Lab;
 
 namespace CSharpAdvanceDesignTests
 {
@@ -17,7 +18,7 @@ namespace CSharpAdvanceDesignTests
         {
             var urls = GetUrls();
 
-            var actual = JoeySelect(urls, url => url.Replace("http://", "https://"));
+            var actual = MyOwnLinq.JoeySelect(urls, url => url.Replace("http://", "https://"));
             var expected = new List<string>
             {
                 "https://tw.yahoo.com",
@@ -35,7 +36,7 @@ namespace CSharpAdvanceDesignTests
         {
             var urls = GetUrls();
 
-            var actual = JoeySelect(urls, url => url.Replace("http://", "https://") + "/joey");
+            var actual = MyOwnLinq.JoeySelect(urls, url => url.Replace("http://", "https://") + "/joey");
             var expected = new List<string>
             {
                 "https://tw.yahoo.com/joey",
@@ -64,7 +65,7 @@ namespace CSharpAdvanceDesignTests
                 "David-Chen",
             };
 
-            var actual = JoeySelect(employees, e => $"{e.FirstName}-{e.LastName}");
+            var actual = MyOwnLinq.JoeySelect(employees, e => $"{e.FirstName}-{e.LastName}");
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
@@ -85,21 +86,28 @@ namespace CSharpAdvanceDesignTests
                 //"DavidChen",
             };
 
-            var actual = JoeySelect(employees, e => $"{e.FirstName}{e.LastName}".Length);
+            var actual = MyOwnLinq.JoeySelect(employees, e => $"{e.FirstName}{e.LastName}".Length);
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-
-        private IEnumerable<TResult> JoeySelect<TSource, TResult>(IEnumerable<TSource> source, Func<TSource, TResult> selector)
+        [Test]
+        public void get_full_name_with_sequence_number()
         {
-            List<TResult> resultList = new List<TResult>();
-
-            foreach (var item in source)
+            var employees = new List<Employee>
             {
-                resultList.Add(selector(item));
-            }
+                new Employee {FirstName = "Joey", LastName = "Chen"},
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "David", LastName = "Chen"}
+            };
+            var expected = new[]
+            {
+                "1.Joey-Chen",
+                "2.Tom-Li",
+                "3.David-Chen",
+            };
 
-            return resultList;
+            var actual = employees.JoeySelectWithAppend((e,index) => $"{index+1}.{e.FirstName}-{e.LastName}");
+            expected.ToExpectedObject().ShouldMatch(actual);
         }
 
 
