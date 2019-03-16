@@ -46,7 +46,11 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joey", LastName = "Chen"},
             };
 
-            var actual = JoeyOrderByLastNameAndFirstName(employees, element => element.LastName, Comparer<string>.Default, element1 => element1.FirstName, Comparer<string>.Default);
+            var actual = JoeyOrderByLastNameAndFirstName(employees, 
+                element => element.LastName, 
+                Comparer<string>.Default,
+                element1 => element1.FirstName,
+                Comparer<string>.Default);
 
             var expected = new[]
             {
@@ -79,7 +83,7 @@ namespace CSharpAdvanceDesignTests
                     }
                     else if(firstCompareResult == 0)
                     {
-                        if (secondKeyComparer.Compare(secondKeySelector(element), minElement.FirstName) < 0)
+                        if (secondKeyComparer.Compare(secondKeySelector(element), secondKeySelector(element)) < 0)
                         {
                             minElement = element;
                             index = i;
