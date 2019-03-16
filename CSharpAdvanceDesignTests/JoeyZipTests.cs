@@ -41,18 +41,9 @@ namespace CSharpAdvanceDesignTests
             var girlEnumerator = girls.GetEnumerator();
             var keyEnumerator = keys.GetEnumerator();
 
-            while (girlEnumerator.MoveNext())
+            while (girlEnumerator.MoveNext() && keyEnumerator.MoveNext())
             {
-                if (keyEnumerator.MoveNext())
-                {
-                    Girl girl = girlEnumerator.Current;
-                    Key key = keyEnumerator.Current;
-
-                    string pair = girl.Name + "-" + key.Owner;
-
-                    //result.Add(pair);
-                    yield return pair;
-                }
+                yield return $"{girlEnumerator.Current.Name}-{keyEnumerator.Current.Owner}";
             }
         }
     }
