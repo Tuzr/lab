@@ -14,10 +14,7 @@ namespace Lab.Entities
 
         public int GetHashCode(Employee obj)
         {
-            var firstNameHashCode = obj.FirstName.GetHashCode();
-            var lastNameHashCode = obj.LastName.GetHashCode();
-
-            return Tuple.Create(firstNameHashCode, lastNameHashCode).GetHashCode();
+            return Tuple.Create(obj.FirstName, obj.LastName).GetHashCode();
         }
     }
 
