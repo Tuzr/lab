@@ -1,7 +1,10 @@
-﻿using ExpectedObjects;
+﻿using System;
+using ExpectedObjects;
 using Lab.Entities;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
 namespace CSharpAdvanceDesignTests
 {
@@ -35,7 +38,26 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerable<Employee> JoeyOrderByLastName(IEnumerable<Employee> employees)
         {
-            throw new System.NotImplementedException();
+
+            //bubble sort
+            var stringComparer = StringComparer.Create(CultureInfo.CurrentCulture, true);
+            var elements = employees.ToList();
+            while (elements.Any())
+            {
+                var minElement = elements[0];
+                var index = 0;
+                for (int i = 1; i < elements.Count; i++)
+                {
+                    if (stringComparer.Compare(elements[i].LastName, minElement.LastName) < 0)
+                    {
+                        minElement = elements[i];
+                        index = i;
+                    }
+                }
+
+                elements.RemoveAt(index);
+                yield return minElement;
+            }
         }
     }
 }
