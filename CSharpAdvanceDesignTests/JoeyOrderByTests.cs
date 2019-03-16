@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace CSharpAdvanceDesignTests
 {
-    public class CombineKeyComparer
+    public class CombineKeyComparer: IComparer<Employee>
     {
         public CombineKeyComparer(Func<Employee, string> keySelector, Comparer<string> keyComparer)
         {
@@ -19,7 +19,7 @@ namespace CSharpAdvanceDesignTests
         public Func<Employee, string> KeySelector { get; private set; }
         public Comparer<string> KeyComparer { get; private set; }
 
-        public int CompareByCombineKeyComparer(Employee element, Employee minElement)
+        public int Compare(Employee element, Employee minElement)
         {
             return KeyComparer.Compare(KeySelector(element), KeySelector(minElement));
         }
@@ -79,7 +79,10 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<Employee> JoeyOrderByLastNameAndFirstName(IEnumerable<Employee> employees, CombineKeyComparer firstComparer, CombineKeyComparer secondComparer)
+        private IEnumerable<Employee> JoeyOrderByLastNameAndFirstName(
+            IEnumerable<Employee> employees,
+            IComparer<Employee> firstComparer,
+            IComparer<Employee> secondComparer)
         {
             //bubble sort
             var elements = employees.ToList();
@@ -90,7 +93,7 @@ namespace CSharpAdvanceDesignTests
                 for (int i = 1; i < elements.Count; i++)
                 {
                     var element = elements[i];
-                    var compareResult = firstComparer.CompareByCombineKeyComparer(element, minElement);
+                    var compareResult = firstComparer.Compare(element, minElement);
                     var firstCompareResult = compareResult;
                     if (firstCompareResult < 0)
                     {
@@ -99,7 +102,7 @@ namespace CSharpAdvanceDesignTests
                     }
                     else if(firstCompareResult == 0)
                     {
-                        if (secondComparer.KeyComparer.Compare(secondComparer.KeySelector(element), secondComparer.KeySelector(minElement)) < 0)
+                        if (secondComparer.Compare(element, (minElement)) < 0)
                         {
                             minElement = element;
                             index = i;
