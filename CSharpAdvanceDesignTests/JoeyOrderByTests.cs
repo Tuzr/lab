@@ -46,7 +46,7 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joey", LastName = "Chen"},
             };
 
-            var actual = JoeyOrderByLastNameAndFirstName(employees);
+            var actual = JoeyOrderByLastNameAndFirstName(employees, element => element.LastName, Comparer<string>.Default, element1 => element1.FirstName, Comparer<string>.Default);
 
             var expected = new[]
             {
@@ -59,10 +59,9 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<Employee> JoeyOrderByLastNameAndFirstName(IEnumerable<Employee> employees)
+        private IEnumerable<Employee> JoeyOrderByLastNameAndFirstName(IEnumerable<Employee> employees, Func<Employee, string> firstKeySelector, Comparer<string> firstKeyComparer, Func<Employee, string> secondKeySelector, Comparer<string> secondKeyComparer)
         {
             //bubble sort
-            var stringComparer = StringComparer.Create(CultureInfo.CurrentCulture, true);
             var elements = employees.ToList();
             while (elements.Any())
             {
@@ -70,16 +69,19 @@ namespace CSharpAdvanceDesignTests
                 var index = 0;
                 for (int i = 1; i < elements.Count; i++)
                 {
-                    if (stringComparer.Compare(elements[i].LastName, minElement.LastName) < 0)
+                    var element = elements[i];
+                    var compareResult = firstKeyComparer.Compare(firstKeySelector(element), firstKeySelector(minElement));
+                    var firstCompareResult = compareResult;
+                    if (firstCompareResult < 0)
                     {
-                        minElement = elements[i];
+                        minElement = element;
                         index = i;
                     }
-                    else if(stringComparer.Compare(elements[i].LastName, minElement.LastName) == 0)
+                    else if(firstCompareResult == 0)
                     {
-                        if (stringComparer.Compare(elements[i].FirstName, minElement.FirstName) < 0)
+                        if (secondKeyComparer.Compare(secondKeySelector(element), minElement.FirstName) < 0)
                         {
-                            minElement = elements[i];
+                            minElement = element;
                             index = i;
                         }
                     }
