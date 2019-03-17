@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace CSharpAdvanceDesignTests
 {
-    [Ignore("not yet")]
     [TestFixture]
     public class JoeyAggregateTests
     {
@@ -26,7 +25,21 @@ namespace CSharpAdvanceDesignTests
 
         private decimal JoeyAggregate(IEnumerable<int> drawlingList, decimal balance)
         {
-            throw new System.NotImplementedException();
+            var enumerator = drawlingList.GetEnumerator();
+
+            var result = balance;
+
+            while (enumerator.MoveNext())
+            {
+                var itemCurrent = enumerator.Current;
+
+                if (result - itemCurrent > 0)
+                {
+                    result = result - itemCurrent;
+                }
+            }
+
+            return result;
         }
     }
 }
