@@ -23,7 +23,7 @@ namespace CSharpAdvanceDesignTests
         private IEnumerable<int> JoeyUnion(IEnumerable<int> first, IEnumerable<int> second)
         {
             var firstEnumerator = first.GetEnumerator();
-            var seconEnumerator = second.GetEnumerator();
+            var secondEnumerator = second.GetEnumerator();
 
             var hashSet = new HashSet<int>();
 
@@ -36,9 +36,9 @@ namespace CSharpAdvanceDesignTests
                 }
             }
 
-            while (seconEnumerator.MoveNext())
+            while (secondEnumerator.MoveNext())
             {
-                var item = seconEnumerator.Current;
+                var item = secondEnumerator.Current;
                 if (hashSet.Add(item))
                 {
                     yield return item;
