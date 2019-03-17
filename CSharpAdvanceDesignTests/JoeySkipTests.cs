@@ -15,7 +15,7 @@ namespace CSharpAdvanceDesignTests
         {
             var employees = GetEmployees();
 
-            var actual = JoeySkip(employees, 0);
+            var actual = JoeySkip(employees, 2);
 
             var expected = new List<Employee>
             {

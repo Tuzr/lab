@@ -39,9 +39,9 @@ namespace Lab
                 if (conditionFunc(item, index))
                 {
                     //result.Add(item);
-                    yield return item;
-                    index++;
+                    yield return item;                    
                 }
+                index++;
             }
 
         }
