@@ -2,13 +2,13 @@
 using Lab.Entities;
 using NUnit.Framework;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace CSharpAdvanceDesignTests
 {
     [TestFixture]
-    [Ignore("not yet")]
     public class JoeyGroupByTests
     {
         [Test]
@@ -23,7 +23,11 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "David", LastName = "Lee"},
             };
 
-            var actual = JoeyGroupBy(employees);
+            var actual = JoeyGroupBy(
+                employees,
+                employee => employee.LastName);
+
+
             Assert.AreEqual(2, actual.Count());
             var firstGroup = new List<Employee>
             {
@@ -35,9 +39,64 @@ namespace CSharpAdvanceDesignTests
             firstGroup.ToExpectedObject().ShouldMatch(actual.First().ToList());
         }
 
-        private IEnumerable<IGrouping<string, Employee>> JoeyGroupBy(IEnumerable<Employee> employees)
+        private IEnumerable<IGrouping<string, Employee>> JoeyGroupBy(IEnumerable<Employee> employees, Func<Employee, string> groupKey)
         {
-            throw new NotImplementedException();
+            var lookup = new Dictionary<string, List<Employee>>();
+
+            var employeeEnumerator = employees.GetEnumerator();
+
+            while (employeeEnumerator.MoveNext())
+            {
+                var employee = employeeEnumerator.Current;
+
+                if (lookup.ContainsKey(groupKey(employee)))
+                {
+                    lookup[groupKey(employee)].Add(employee);
+                }
+                else
+                {
+                    lookup.Add(groupKey(employee), new List<Employee>{employee});
+                }                               
+            }
+
+            return ConvertMultiGrouping(lookup);
+
+        }
+
+        private IEnumerable<IGrouping<string, Employee>> ConvertMultiGrouping(Dictionary<string, List<Employee>> lookup)
+        {
+            var enumerator = lookup.GetEnumerator();
+
+            while (enumerator.MoveNext())
+            {
+                var keyValuePair = enumerator.Current;
+
+                yield return new MyGrouping(keyValuePair.Key, keyValuePair.Value);
+            }
+        }
+    }
+
+    internal class MyGrouping : IGrouping<string, Employee>
+    {
+        private readonly IEnumerable<Employee> _collection;
+
+        public string Key { get; }
+
+        public MyGrouping(string key, List<Employee> collection)
+        {
+
+            Key = key;
+            _collection = collection;
+        }
+
+        public IEnumerator<Employee> GetEnumerator()
+        {
+            return _collection.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }
