@@ -30,12 +30,15 @@ namespace CSharpAdvanceDesignTests
             {
                 var item = enumerator.Current;
 
-                if (item.GetType()!=typeof(T))
+                if (item is T castItem)
+                {
+                    yield return castItem;
+                }
+                else
                 {
                     throw new JoeyCastException();
                 }
 
-                yield return (T) item;
             }
         }
     }
