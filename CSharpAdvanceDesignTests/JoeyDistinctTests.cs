@@ -44,11 +44,11 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<Employee> JoeyDistinctWithEqualityComparer<Employee>(IEnumerable<Employee> employees, IEqualityComparer<Employee> comparer)
+        private IEnumerable<TSource> JoeyDistinctWithEqualityComparer<TSource>(IEnumerable<TSource> employees, IEqualityComparer<TSource> comparer)
         {
             var enumerator = employees.GetEnumerator();
 
-            var  hashSet = new HashSet<Employee>(comparer);
+            var  hashSet = new HashSet<TSource>(comparer);
 
             while (enumerator.MoveNext())
             {
@@ -63,19 +63,21 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerable<int> JoeyDistinct(IEnumerable<int> numbers)
         {
-            var numbersEnumerator = numbers.GetEnumerator();
+            return JoeyDistinctWithEqualityComparer(numbers, EqualityComparer<int>.Default);
 
-            var hashSet = new HashSet<int>();
+            //var numbersEnumerator = numbers.GetEnumerator();
 
-            while (numbersEnumerator.MoveNext())
-            {
-                var item = numbersEnumerator.Current;
+            //var hashSet = new HashSet<int>();
 
-                if (hashSet.Add(item))
-                {
-                    yield return item;
-                }
-            }
+            //while (numbersEnumerator.MoveNext())
+            //{
+            //    var item = numbersEnumerator.Current;
+
+            //    if (hashSet.Add(item))
+            //    {
+            //        yield return item;
+            //    }
+            //}
         }
     }
 }
