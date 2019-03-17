@@ -100,7 +100,7 @@ namespace CSharpAdvanceDesignTests
         //}
 
         [Test]
-        public void lastName_firstName_Age()
+        public void lastName_firstname_Age()
         {
             var employees = new[]
             {
