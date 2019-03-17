@@ -25,15 +25,14 @@ namespace CSharpAdvanceDesignTests
             var firstEnumerator = first.GetEnumerator();
             var secondEnumerator = second.GetEnumerator();
 
-            var hashSetFirst = new HashSet<int>();
-            var hashSetSecond = new HashSet<int>();
+            var hashSet = new HashSet<int>(second);
 
             while (firstEnumerator.MoveNext())
             {
                 var item = firstEnumerator.Current;
-                if (!hashSetFirst.Add(item))
+                if (!hashSet.Add(item))
                 {
-                    hashSetSecond.Add(item);
+                    hashSet.Add(item);
                     yield return item;                    
                 }
             }
@@ -42,10 +41,10 @@ namespace CSharpAdvanceDesignTests
             {
                 var item = secondEnumerator.Current;
 
-                if (!hashSetFirst.Add(item) && hashSetSecond.Add(item))
-                {
-                    yield return item;
-                }
+                //if (!hashSet.Add(item) && hashSetSecond.Add(item))
+                //{
+                //    yield return item;
+                //}
             }
         }
     }
