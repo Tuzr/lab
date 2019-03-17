@@ -1,11 +1,11 @@
 ﻿using ExpectedObjects;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CSharpAdvanceDesignTests
 {
     [TestFixture]
-    [Ignore("not yet")]
     public class JoeySelectManyTests
     {
         [Test]
@@ -33,7 +33,20 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerable<string> JoeySelectMany(IEnumerable<City> cities)
         {
-            throw new System.NotImplementedException();
+            var enumerator = cities.GetEnumerator();
+
+            while (enumerator.MoveNext())
+            {
+                var current = enumerator.Current;
+
+                var sectionsEnumerator = current.Sections.GetEnumerator();
+
+                while (sectionsEnumerator.MoveNext())
+                {
+                    var section = sectionsEnumerator.Current;
+                    yield return $"{current.Name}-{section}";
+                }
+            }
         }
     }
 
