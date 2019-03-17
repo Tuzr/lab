@@ -19,13 +19,13 @@ namespace CSharpAdvanceDesignTests
 
             var actual = JoeyAggregate(drawlingList, balance, (itemCurrent, seed) =>
             {
-                decimal seed1 = seed;
-                if (itemCurrent <= seed1)
+                decimal result = seed;
+                if (itemCurrent <= result)
                 {
-                    seed1 -= itemCurrent;
+                    result -= itemCurrent;
                 }
 
-                return seed1;
+                return result;
             });
 
             var expected = 10.91m;
