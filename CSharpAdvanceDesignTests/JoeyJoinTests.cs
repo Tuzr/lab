@@ -12,9 +12,9 @@ namespace CSharpAdvanceDesignTests
         [Test]
         public void all_pets_and_owner()
         {
-            var david = new Employee { FirstName = "David", LastName = "Chen" };
-            var joey = new Employee { FirstName = "Joey", LastName = "Chen" };
-            var tom = new Employee { FirstName = "Tom", LastName = "Chen" };
+            var david = new Employee { FirstName = "David", LastName = "Li" };
+            var joey = new Employee { FirstName = "Joey", LastName = "Fan" };
+            var tom = new Employee { FirstName = "Tom", LastName = "Wang" };
 
             var employees = new[]
             {
@@ -25,26 +25,34 @@ namespace CSharpAdvanceDesignTests
 
             var pets = new Pet[]
             {
-                new Pet() {Name = "Lala", Owner = joey},
+                new Pet() {Name = "LaLa", Owner = joey},
                 new Pet() {Name = "Didi", Owner = david},
                 new Pet() {Name = "Fufu", Owner = tom},
                 new Pet() {Name = "QQ", Owner = joey},
             };
 
-            var actual = JoeyJoin(employees, pets);
+            var actual = JoeyJoin(employees, pets, (employee, pet) => $"{pet.Name}-{employee.LastName}");
+
+            //var expected = new[]
+            //{
+            //    Tuple.Create("David", "Didi"),
+            //    Tuple.Create("Joey", "Lala"),
+            //    Tuple.Create("Joey", "QQ"),
+            //    Tuple.Create("Tom", "Fufu"),
+            //};
 
             var expected = new[]
             {
-                Tuple.Create("David", "Didi"),
-                Tuple.Create("Joey", "Lala"),
-                Tuple.Create("Joey", "QQ"),
-                Tuple.Create("Tom", "Fufu"),
+                $"Didi-Li",
+                $"LaLa-Fan",
+                $"QQ-Fan",
+                $"Fufu-Wang",
             };
 
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<Tuple<string, string>> JoeyJoin(IEnumerable<Employee> employees, IEnumerable<Pet> pets)
+        private IEnumerable<TResult> JoeyJoin<TResult>(IEnumerable<Employee> employees, IEnumerable<Pet> pets, Func<Employee, Pet, TResult> resultSelector)
         {
             var employeeEnumerator = employees.GetEnumerator();
             var petEnumerator = pets.GetEnumerator();
@@ -59,7 +67,7 @@ namespace CSharpAdvanceDesignTests
 
                     if (pet.Owner.Equals(employee))
                     {
-                        yield return Tuple.Create(employee.FirstName, pet.Name);
+                        yield return resultSelector(employee, pet);
                     }
                 }
 
