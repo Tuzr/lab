@@ -25,16 +25,27 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerable<int> JoeySkipLast(IEnumerable<int> numbers, int count)
         {
-            //var enumerator = numbers.GetEnumerator();
-
-            Queue<int> queue = new Queue<int>(numbers);
-
-            var queueCount = queue.Count;
-
-            for (int i = 0; i < queueCount - count; i++)
+            var sourceEnumerator = numbers.GetEnumerator();
+            var queue = new Queue<int>();
+            while (sourceEnumerator.MoveNext())
             {
-                yield return queue.Dequeue();
+                var current = sourceEnumerator.Current;
+
+                if (queue.Count == count)
+                {
+                    yield return queue.Dequeue();
+                }
+                queue.Enqueue(current);
             }
+
+            //Queue<int> queue = new Queue<int>(numbers);
+
+            //var queueCount = queue.Count;
+
+            //for (int i = 0; i < queueCount - count; i++)
+            //{
+            //    yield return queue.Dequeue();
+            //}
         }
     }
 }
