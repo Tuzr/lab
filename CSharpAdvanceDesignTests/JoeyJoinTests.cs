@@ -62,6 +62,8 @@ namespace CSharpAdvanceDesignTests
                         yield return Tuple.Create(employee.FirstName, pet.Name);
                     }
                 }
+
+                petEnumerator.Reset();
             }
         }
     }
