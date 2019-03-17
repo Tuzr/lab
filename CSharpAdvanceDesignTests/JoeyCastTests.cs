@@ -17,7 +17,9 @@ namespace CSharpAdvanceDesignTests
 
             void TestDelegate() => JoeyCast<int>(arrayList).ToArray();
 
-            Assert.Throws<InvalidCastException>(TestDelegate);
+            //Assert.Throws<InvalidCastException>(TestDelegate);
+
+            Assert.Throws<JoeyCastException>(TestDelegate);
         }
 
         private IEnumerable<T> JoeyCast<T>(IEnumerable source)
@@ -28,8 +30,18 @@ namespace CSharpAdvanceDesignTests
             {
                 var item = enumerator.Current;
 
-                yield return (T)item;
+                if (item.GetType()!=typeof(T))
+                {
+                    throw new JoeyCastException();
+                }
+
+                yield return (T) item;
             }
         }
+    }
+
+    public class JoeyCastException : Exception
+    {
+
     }
 }
