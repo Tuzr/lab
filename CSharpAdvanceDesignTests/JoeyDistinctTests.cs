@@ -21,17 +21,16 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerable<int> Distinct(IEnumerable<int> numbers)
         {
-            var numbersEnumerator = numbers.GetEnumerator();            
-            
-            List<int> tmp = new List<int>();
+            var numbersEnumerator = numbers.GetEnumerator();
+
+            var hashSet = new HashSet<int>();
 
             while (numbersEnumerator.MoveNext())
             {
                 var item = numbersEnumerator.Current;
 
-                if (!tmp.Contains(item))
-                {
-                    tmp.Add(item);
+                if (hashSet.Add(item))
+                {                    
                     yield return item;
                 }                
             }
