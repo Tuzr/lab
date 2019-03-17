@@ -31,7 +31,12 @@ namespace CSharpAdvanceDesignTests
                 new Pet() {Name = "QQ", Owner = joey},
             };
 
-            var actual = JoeyJoin(employees, pets, (employee, pet) => $"{pet.Name}-{employee.LastName}");
+            var actual = JoeyJoin(
+                employees, 
+                pets, 
+                employee1 => employee1, 
+                pet1 => pet1.Owner, 
+                (employee, pet) => $"{pet.Name}-{employee.LastName}");
 
             //var expected = new[]
             //{
@@ -52,7 +57,9 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<TResult> JoeyJoin<TResult>(IEnumerable<Employee> employees, IEnumerable<Pet> pets, Func<Employee, Pet, TResult> resultSelector)
+        private IEnumerable<TResult> JoeyJoin<TResult>(IEnumerable<Employee> employees, IEnumerable<Pet> pets,
+            Func<Employee, Employee> employeeKeySelector, Func<Pet, Employee> petKeySelector,
+            Func<Employee, Pet, TResult> resultSelector)
         {
             var employeeEnumerator = employees.GetEnumerator();
             var petEnumerator = pets.GetEnumerator();
@@ -65,7 +72,7 @@ namespace CSharpAdvanceDesignTests
                 {
                     var pet = petEnumerator.Current;
 
-                    if (pet.Owner.Equals(employee))
+                    if (petKeySelector(pet).Equals(employeeKeySelector(employee)))
                     {
                         yield return resultSelector(employee, pet);
                     }
