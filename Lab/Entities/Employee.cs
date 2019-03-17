@@ -28,7 +28,7 @@ namespace Lab.Entities
 
         public int GetHashCode(Employee obj)
         {
-            throw new System.NotImplementedException();
+            return Tuple.Create(obj.FirstName, obj.LastName).GetHashCode();
         }
     }
 

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 namespace CSharpAdvanceDesignTests
 {
     [TestFixture]
-    [Ignore("not yet")]
     public class JoeyContainsTests
     {
         [Test]
@@ -27,7 +26,19 @@ namespace CSharpAdvanceDesignTests
 
         private bool JoeyContains(IEnumerable<Employee> employees, Employee value)
         {
-            throw new System.NotImplementedException();
+            var employeesEnumerator = employees.GetEnumerator();
+
+            JoeyEmployeeEqualityConverter equalityConverter = new JoeyEmployeeEqualityConverter();
+
+            while (employeesEnumerator.MoveNext())
+            {
+                if (equalityConverter.Equals(employeesEnumerator.Current, value))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
